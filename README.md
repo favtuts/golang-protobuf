@@ -146,3 +146,64 @@ Then re-generate Golang code again
 ```
 $ protoc --go_out=. person.proto
 ```
+
+
+# run main
+
+Let's keep the simple proto file with firstname and lastname attributes, and re-generate Go code again
+```
+message Person {
+    string firstname = 1;
+    string lastname = 2;    
+}
+```
+
+Then create new `main.go` file then we can use protobuf to serialize the `Person` struct
+```
+package main
+
+import (
+	"io/ioutil"
+	"log"
+
+	"github.com/golang/protobuf/proto"
+)
+
+func main() {
+	person := &Person{
+		Firstname: "John",
+		Lastname:  "Doe",
+	}
+
+	serializedPerson, err := proto.Marshal(person)
+	if err != nil {
+		log.Fatal("marshalling error: ", err)
+	}
+
+	ioutil.WriteFile("person.data", serializedPerson, 0644)
+}
+```
+
+Then run the program to generate the `person.data` file
+```
+$ go run *.go
+```
+
+We create 2 new files:`person.json` and `person.xml` and then compare the file size:
+```
+$ stat person.xml
+  File: person.xml
+  Size: 71              Blocks: 8          IO Block: 4096   regular file
+
+
+$ stat person.json
+  File: person.json
+  Size: 40              Blocks: 8          IO Block: 4096   regular file
+
+
+$ stat person.data
+  File: person.data
+  Size: 11              Blocks: 8          IO Block: 4096   regular file
+```
+
+You can see the data file that we serialized using protocol buffers is a lot less, the size is 11. So that the main advantages of using protocol buffers the data is binary and it's compressed automatically so we can see the difference between binary format and using JSON or XML.
