@@ -148,7 +148,7 @@ $ protoc --go_out=. person.proto
 ```
 
 
-# run main
+# generate proto binary Person data
 
 Let's keep the simple proto file with firstname and lastname attributes, and re-generate Go code again
 ```
@@ -207,3 +207,18 @@ $ stat person.data
 ```
 
 You can see the data file that we serialized using protocol buffers is a lot less, the size is 11. So that the main advantages of using protocol buffers the data is binary and it's compressed automatically so we can see the difference between binary format and using JSON or XML.
+
+
+# convert proto binary Person data to struct
+
+```go
+person2 := &Person{}
+
+err = proto.Unmarshal(serializedPerson, person2)
+if err != nil {
+    log.Fatal("unmarshalling error:", err)
+}
+
+fmt.Println(person2.GetFirstname())
+fmt.Println(person2.GetLastname())
+```

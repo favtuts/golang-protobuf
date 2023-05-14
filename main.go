@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 
@@ -15,8 +16,21 @@ func main() {
 
 	serializedPerson, err := proto.Marshal(person)
 	if err != nil {
-		log.Fatal("marshalling error: ", err)
+		log.Fatal("marshalling error:", err)
 	}
 
-	ioutil.WriteFile("person.data", serializedPerson, 0644)
+	err = ioutil.WriteFile("person.data", serializedPerson, 0644)
+	if err != nil {
+		log.Fatal("error writing the file", err)
+	}
+
+	person2 := &Person{}
+
+	err = proto.Unmarshal(serializedPerson, person2)
+	if err != nil {
+		log.Fatal("unmarshalling error:", err)
+	}
+
+	fmt.Println(person2.GetFirstname())
+	fmt.Println(person2.GetLastname())
 }
