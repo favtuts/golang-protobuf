@@ -118,3 +118,31 @@ go get: downgraded google.golang.org/protobuf v1.30.0 => v1.26.0-rc.1
 ```
 
 Then re-run the command again, we can see that a "person.pb.go" is generated
+
+
+# update new attributes
+
+Let's add some other attributes like age or job, and a list of friends
+```
+syntax = "proto3";
+
+package main;
+
+message Job {
+    string title = 1;
+    float salary = 2;
+}
+
+message Person {
+    string firstname = 1;
+    string lastname = 2;
+    int32 age = 3;
+    Job job = 4;
+    repeated Person friends = 5;
+}
+```
+
+Then re-generate Golang code again
+```
+$ protoc --go_out=. person.proto
+```
