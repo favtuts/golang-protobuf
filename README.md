@@ -1,2 +1,69 @@
 # golang-protobuf
 Getting started with Protocol Buffers by Google
+
+# what is protobuf
+
+* Protobuf allows to define the required data structures using its IDL (int .proto files)
+* Use that IDL as the source we can generate code for multiple languages (Gp, Java, Python, C++, C#,...).
+* Protobuf is used by default to define messages and services in gRPC
+* gRPC is a modern Remote Procedure Call (RPC) framework to connect applications using HTTP/2 and provides features such as authentication bidirectional streaming and flow control.
+
+![Protocol Buffers and gRPC](images/protobuf-grpc.png)
+
+
+# install protoc
+
+* We can download a bundle that includes multiple languages from this URL: https://github.com/protocolbuffers/protobuf/releases but not for Golang. More information on [Cross-lanuage Compatibility](https://protobuf.dev/overview/#cross-lang)
+* For Go we need to install protobuf compiler using the [proto3](https://protobuf.dev/programming-guides/proto3/) version. More details you can read on [Protocol Compiler Installation](https://github.com/protocolbuffers/protobuf#protocol-compiler-installation)
+* The protoc compiler use plugins for [Go support for Protocol Buffers](https://github.com/protocolbuffers/protobuf-go)
+
+Here is the step to [install Protobuf on Ubuntu 20.04](https://gist.github.com/jambonn/1f5fffc23f97f8413372a438739c1bff)
+1. sudo apt-get install autoconf automake libtool curl make g++ unzip -y
+2. Download the appropriate release here:
+cd ~/Downloads
+(https://github.com/protocolbuffers/protobuf/releases/tag/v3.20.3 <protobuf-all-3.20.3.tar.gz)
+wget https://github.com/protocolbuffers/protobuf/releases/download/v3.20.3/protobuf-all-3.20.3.tar.gz
+#wget https://github.com/protocolbuffers/protobuf/releases/tag/v3.5.1 <protobuf-all-3.5.1.tar.gz
+>
+3. Unzip the folder
+```
+tar -xf protobuf-all-3.20.3.tar.gz
+```
+4. Enter the folder and run ./autogen.sh && ./configure && make
+```
+$ cd protobuf-3.20.3/
+$ ./autogen.sh && ./configure && make
+```
+5. Then run these other commands. They should run without issues:
+```
+$ make check
+$ sudo make install
+$ which protoc
+/usr/local/bin/protoc
+$ sudo ldconfig
+$ protoc --version
+libprotoc 3.20.3
+```
+
+# init project
+
+Init Go module
+```
+$ go mod init github.com/favtuts/golang-protobuf
+```
+
+Install protoc gen library for GO
+```
+$ cd PROJECT_ROOT
+$ go get github.com/golang/protobuf/protoc-gen-go
+go: module github.com/golang/protobuf is deprecated: Use the "google.golang.org/protobuf" module instead.
+go get: installing executables with 'go get' in module mode is deprecated.
+        To adjust and download dependencies of the current module, use 'go get -d'.
+        To install using requirements of the current module, use 'go install'.
+        To install ignoring the current module, use 'go install' with a version,
+        like 'go install example.com/cmd@latest'.
+        For more information, see https://golang.org/doc/go-get-install-deprecation
+        or run 'go help get' or 'go help install'.
+go get: added github.com/golang/protobuf v1.5.3
+go get: added google.golang.org/protobuf v1.26.0
+```
